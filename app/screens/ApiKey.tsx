@@ -6,8 +6,10 @@ import { useApiKeyContext } from '../contexts/apiKeyContext';
 
 const ApiKeyPage = () => {
 
-  const { apiKey, setApiKey } = useApiKeyContext();
+  const { apiKey, setApiKey, anthropicApiKey, setAnthropicApiKey } = useApiKeyContext();
+
   const [apiKeyInput, setApiKeyInput] = useState(apiKey);
+  const [anthropicApiKeyInput, setAnthropicApiKeyInput] = useState(anthropicApiKey);
 
   // Function to open the OpenAI API keys page in a browser
   const openApiKeysPage = () => {
@@ -24,12 +26,28 @@ const ApiKeyPage = () => {
     }
   };
 
+  // Save API key to context
+  const saveAnthropicApiKey = async () => {
+    if (anthropicApiKeyInput.trim().length > 0) {
+        setAnthropicApiKey(anthropicApiKeyInput);
+      Toast.show('Anthropic key saved', { duration: Toast.durations.SHORT });
+    } else {
+      Alert.alert('Error', 'Please enter a valid API key');
+    }
+  };
+
   // Remove API key from context
   const removeApiKey = async () => {
     setApiKey('');
     setApiKeyInput('');
     Toast.show('API key removed', { duration: Toast.durations.SHORT });
   };
+
+  const removeAnthropicApiKey = async () => {
+      setAnthropicApiKey('');
+    setAnthropicApiKeyInput('');
+    Toast.show('API key removed', { duration: Toast.durations.SHORT });
+  }
 
   // Function to handle button press
   const handleButtonPress = () => {
@@ -39,9 +57,18 @@ const ApiKeyPage = () => {
       saveApiKey();
     }
   };
+  // Function to handle button press
+  const handleAnthropicButtonPress = () => {
+    if (anthropicApiKey) {
+        removeAnthropicApiKey();
+    } else {
+      saveAnthropicApiKey();
+    }
+  };
 
   return (
     <View style={styles.container}>
+        <View style={styles.section}>
       <Text style={styles.label}>
         To connect with AI, add an API key. You can obtain an API key from
         {' '}
@@ -53,7 +80,7 @@ const ApiKeyPage = () => {
       <TextInput
         value={apiKeyInput}
         onChangeText={setApiKeyInput}
-        placeholder='Enter your API key'
+        placeholder='OpenAI API key'
         autoCorrect={false}
         autoCapitalize='none'
         style={styles.input}
@@ -64,7 +91,28 @@ const ApiKeyPage = () => {
           {apiKey ? 'Remove' : 'Save'}
         </Text>
       </Pressable>
+        </View>
+
+            <View style={styles.section}>
+            <Text style={styles.label}>
+            Connect Anthropic API for Claude.
+        </Text>
+        <TextInput
+            value={anthropicApiKeyInput}
+            onChangeText={setAnthropicApiKeyInput}
+            placeholder='Anthropic API key'
+            autoCorrect={false}
+            autoCapitalize='none'
+            style={styles.input}
+            editable={!anthropicApiKey}
+        />
+        <Pressable onPress={handleAnthropicButtonPress} style={styles.button}>
+            <Text style={styles.buttonText}>
+                {anthropicApiKey ? 'Remove' : 'Save'}
+            </Text>
+        </Pressable>
     </View>
+        </View>
   );
 };
 
@@ -106,6 +154,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
   },
+    section: {
+        marginBottom: 32,
+},
 });
 
 export default ApiKeyPage;

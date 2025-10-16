@@ -5,6 +5,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 interface ApiKeyContextType {
     apiKey: string;
     setApiKey: (key: string) => void;
+    anthropicApiKey: string;
+    setAnthropicApiKey: (key: string) => void;
 }
 
 // Create API key context
@@ -14,12 +16,15 @@ const ApiKeyContext = createContext<ApiKeyContextType | undefined>(undefined);
 export const ApiKeyContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
     const [apiKey, setApiKeyState] = useState<string>('');
+    const [anthropicApiKey, setAnthropicApiKeyState] = useState<string>('');
 
     // Load API key from storage on component mount
     useEffect(() => {
         const loadApiKey = async () => {
-            const key = await AsyncStorage.getItem('apiKey');
-            setApiKey(key || '');
+            const openAIKey = await AsyncStorage.getItem('apiKey');
+            const anthropicKey = await AsyncStorage.getItem('anthropicApiKey');
+            setApiKey(openAIKey || '');
+            setAnthropicApiKey(anthropicKey || '');
         };
 
         loadApiKey();
@@ -31,9 +36,13 @@ export const ApiKeyContextProvider: React.FC<{ children: React.ReactNode }> = ({
         await AsyncStorage.setItem('apiKey', key);
     };
 
+    const setAnthropicApiKey = async (key: string) => {
+        setAnthropicApiKeyState(key);
+        await AsyncStorage.setItem('anthropicApiKey', key);
+    };
 
     return (
-        <ApiKeyContext.Provider value={{ apiKey, setApiKey }}>
+        <ApiKeyContext.Provider value={{ apiKey, setApiKey, anthropicApiKey, setAnthropicApiKey }}>
             {children}
         </ApiKeyContext.Provider>
     );

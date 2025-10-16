@@ -29,8 +29,14 @@ npm install
 
 3. Start the development server:
 
+With Expo CLI installed:
 ```
 expo start
+```
+
+Without Expo CLI:
+```
+npx expo start
 ```
 
 
