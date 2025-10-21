@@ -6,9 +6,9 @@ import { useApiKeyContext } from '../contexts/apiKeyContext';
 
 const ApiKeyPage = () => {
 
-  const { apiKey, setApiKey, anthropicApiKey, setAnthropicApiKey } = useApiKeyContext();
+  const { openAiApiKey, setOpenAiApiKey, anthropicApiKey, setAnthropicApiKey } = useApiKeyContext();
 
-  const [apiKeyInput, setApiKeyInput] = useState(apiKey);
+  const [openAiApiKeyInput, setOpenAiApiKeyInput] = useState(openAiApiKey);
   const [anthropicApiKeyInput, setAnthropicApiKeyInput] = useState(anthropicApiKey);
 
   // Function to open the OpenAI API keys page in a browser
@@ -17,9 +17,9 @@ const ApiKeyPage = () => {
   };
 
   // Save API key to context
-  const saveApiKey = async () => {
-    if (apiKeyInput.trim().length > 0) {
-      setApiKey(apiKeyInput);
+  const saveOpenAiApiKey = async () => {
+    if (openAiApiKeyInput.trim().length > 0) {
+      setOpenAiApiKey(openAiApiKeyInput);
       Toast.show('API key saved', { duration: Toast.durations.SHORT });
     } else {
       Alert.alert('Error', 'Please enter a valid API key');
@@ -37,9 +37,9 @@ const ApiKeyPage = () => {
   };
 
   // Remove API key from context
-  const removeApiKey = async () => {
-    setApiKey('');
-    setApiKeyInput('');
+  const removeOpenAiApiKey = async () => {
+    setOpenAiApiKey('');
+    setOpenAiApiKeyInput('');
     Toast.show('API key removed', { duration: Toast.durations.SHORT });
   };
 
@@ -52,9 +52,9 @@ const ApiKeyPage = () => {
   // Function to handle button press
   const handleButtonPress = () => {
     if (apiKey) {
-      removeApiKey();
+        removeOpenAiApiKey();
     } else {
-      saveApiKey();
+      saveOpenAiApiKey();
     }
   };
   // Function to handle button press
@@ -78,17 +78,17 @@ const ApiKeyPage = () => {
         .
       </Text>
       <TextInput
-        value={apiKeyInput}
-        onChangeText={setApiKeyInput}
+        value={openAiApiKeyInput}
+        onChangeText={setOpenAiApiKey}
         placeholder='OpenAI API key'
         autoCorrect={false}
         autoCapitalize='none'
         style={styles.input}
-        editable={!apiKey}
+        editable={!openAiApiKey}
       />
       <Pressable onPress={handleButtonPress} style={styles.button}>
         <Text style={styles.buttonText}>
-          {apiKey ? 'Remove' : 'Save'}
+          {openAiApiKey ? 'Remove' : 'Save'}
         </Text>
       </Pressable>
         </View>

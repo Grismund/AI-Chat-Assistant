@@ -15,15 +15,15 @@ const ApiKeyContext = createContext<ApiKeyContextType | undefined>(undefined);
 // API key context provider component
 export const ApiKeyContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
-    const [apiKey, setApiKeyState] = useState<string>('');
+    const [openAiApiKey, setOpenAiApiKeyState] = useState<string>('');
     const [anthropicApiKey, setAnthropicApiKeyState] = useState<string>('');
 
     // Load API key from storage on component mount
     useEffect(() => {
         const loadApiKey = async () => {
-            const openAIKey = await AsyncStorage.getItem('apiKey');
+            const openAiKey = await AsyncStorage.getItem('openAiApiKey');
             const anthropicKey = await AsyncStorage.getItem('anthropicApiKey');
-            setApiKey(openAIKey || '');
+            setOpenAiApiKey(openAiKey || '');
             setAnthropicApiKey(anthropicKey || '');
         };
 
@@ -31,9 +31,9 @@ export const ApiKeyContextProvider: React.FC<{ children: React.ReactNode }> = ({
     }, []);
 
     // Function to update the API key state and save it to storage
-    const setApiKey = async (key: string) => {
+    const setOpenAiApiKey = async (key: string) => {
         setApiKeyState(key);
-        await AsyncStorage.setItem('apiKey', key);
+        await AsyncStorage.setItem('openAiApiKey', key);
     };
 
     const setAnthropicApiKey = async (key: string) => {
@@ -42,7 +42,7 @@ export const ApiKeyContextProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     return (
-        <ApiKeyContext.Provider value={{ apiKey, setApiKey, anthropicApiKey, setAnthropicApiKey }}>
+        <ApiKeyContext.Provider value={{ openAiApiKey, setOpenAiApiKey, anthropicApiKey, setAnthropicApiKey }}>
             {children}
         </ApiKeyContext.Provider>
     );
